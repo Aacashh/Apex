@@ -76,18 +76,18 @@ python -m apex resume outputs/cifar10/manifest.lock.json --run-id RUN_ID --devic
 
 ## Method and mathematics
 
-Let $N$ be the number of clients, $K$ the cohort size, and $S_t$ the selected clients at round $t$. Client $i$ has $n_i$ training examples. The training objective is
+Let $`N`$ be the number of clients, $`K`$ the cohort size, and $`S_t`$ the selected clients at round $`t`$. Client $`i`$ has $`n_i`$ training examples. The training objective is
 
-$$
+```math
 \min_w F(w)=\sum_{i=1}^{N}\frac{n_i}{\sum_j n_j}F_i(w),\qquad
 F_i(w)=\frac{1}{n_i}\sum_{z\in D_i}\ell(w;z).
-$$
+```
 
 Each selected client starts from the current global model and performs local SGD. Floating-point model state is aggregated in ascending client-ID order:
 
-$$
+```math
 w_{t+1}=\sum_{i\in S_t}\frac{n_i}{\sum_{j\in S_t}n_j}w_{t,i}.
-$$
+```
 
 Integer buffers are copied from the lowest-ID selected client. Models start from random initialization; each participation gets a fresh SGD optimizer.
 
@@ -95,107 +95,107 @@ Integer buffers are copied from the lowest-ID selected client. Models start from
 
 Client context combines min–max normalized last local training loss, gradient norm, inverse estimated duration, and data size:
 
-$$
+```math
 u_i=0.4\widetilde\ell_i+0.2\widetilde g_i+
 0.2\widetilde s_i+0.2\widetilde n_i.
-$$
+```
 
-Loss and gradient normalization use clients with an existing reward observation. Unobserved clients receive the neutral value $0.5$ for these two features; a constant observed feature normalizes to zero. Losses and gradient norms come from previous participations and can become stale. Estimated duration is an abstract compute/channel trace, rather than a measured network latency.
+Loss and gradient normalization use clients with an existing reward observation. Unobserved clients receive the neutral value $`0.5`$ for these two features; a constant observed feature normalizes to zero. Losses and gradient norms come from previous participations and can become stale. Estimated duration is an abstract compute/channel trace, rather than a measured network latency.
 
-Let $h_i$ be the label-count vector and $\widehat h_i=h_i/\|h_i\|_2$. The complete proxy is normalized after concatenation:
+Let $`h_i`$ be the label-count vector and $`\widehat h_i=h_i/\|h_i\|_2`$. The complete proxy is normalized after concatenation:
 
-$$
+```math
 v_i=\frac{[\widetilde\ell_i,\widetilde g_i,\widehat h_i]}
 {\|[\widetilde\ell_i,\widetilde g_i,\widehat h_i]\|_2}.
-$$
+```
 
-A zero vector stays zero. With selected cohort $S$, the diversity bonus is
+A zero vector stays zero. With selected cohort $`S`$, the diversity bonus is
 
-$$
+```math
 d_i(S)=\begin{cases}
 0,&S=\varnothing,\\
-\operatorname{clip}\left(1-\max_{j\in S}v_i^\top v_j,0,2\right),&S\ne\varnothing.
+\mathrm{clip}\left(1-\max_{j\in S}v_i^\top v_j,0,2\right),&S\ne\varnothing.
 \end{cases}
-$$
+```
 
 The maximum similarity implements distance to the **nearest** selected proxy. Label histograms describe label mixture; this proxy is not the full gradient direction.
 
 ### 2. Reward observations and Thompson-style sampling
 
-For the primary reward, the feedback-set accuracy improvement is $r_t=A_{t+1}-A_t$, measured as a fraction. Every selected client receives the same cohort credit $q_{i,t}=r_t/K$. Credits update the selector at the next selection call, so the final round has no subsequent posterior update.
+For the primary reward, the feedback-set accuracy improvement is $`r_t=A_{t+1}-A_t`$, measured as a fraction. Every selected client receives the same cohort credit $`q_{i,t}=r_t/K`$. Credits update the selector at the next selection call, so the final round has no subsequent posterior update.
 
-Credits are smoothed with $\rho=0.3$:
+Credits are smoothed with $`\rho=0.3`$:
 
-$$
+```math
 e_{i,m}=\rho q_{i,m}+(1-\rho)e_{i,m-1},\qquad e_{i,1}=q_{i,1}.
-$$
+```
 
-For observation count $m$, running mean and regularized variance follow the implemented recurrence:
+For observation count $`m`$, running mean and regularized variance follow the implemented recurrence:
 
-$$
+```math
 \delta=e_{i,m}-\mu_{i,m-1},\qquad
 \mu_{i,m}=\mu_{i,m-1}+\delta/m,
-$$
+```
 
-$$
+```math
 V_{i,m}=\max\left\{
 \frac{(m-1)V_{i,m-1}+\delta(e_{i,m}-\mu_{i,m})}{m},
 \frac{0.1}{\sqrt m}\right\}.
-$$
+```
 
-The initial mean is zero and initial variance is one. For $m\ge2$, draw $\theta_i\sim\mathcal N(\mu_{i,m},V_{i,m}/m)$. Before two observations, draw from $\operatorname{Beta}(a_i,b_i)$, initially $(1,1)$. A positive smoothed credit increments $a_i$ by $\min(e_{i,m},1)$; a nonpositive credit increments $b_i$ by $\min(|e_{i,m}|,1)$.
+The initial mean is zero and initial variance is one. For $`m\ge2`$, draw $`\theta_i\sim\mathcal N(\mu_{i,m},V_{i,m}/m)`$. Before two observations, draw from $`\mathrm{Beta}(a_i,b_i)`$, initially $`(1,1)`$. A positive smoothed credit increments $`a_i`$ by $`\min(e_{i,m},1)`$; a nonpositive credit increments $`b_i`$ by $`\min(|e_{i,m}|,1)`$.
 
 The adaptive blend is
 
-$$
+```math
 \gamma_i=0.3\left(1-\frac{1}{1+m_i}\right),\qquad
 z_i=(1-\gamma_i)u_i+\gamma_i\theta_i.
-$$
+```
 
 The shared aggregate reward couples clients. These are heuristic exploration statistics, not independently identified causal contributions or an exact independent-arm Bayesian posterior. The variance floor is included in the next recurrence, rather than maintained as a separate unbiased sample variance.
 
 ### 3. Phase detection and heterogeneity
 
-Apex tracks the unweighted mean of positive last training losses for the preceding selected cohort. With window $W=5$, let $\bar L_{\rm recent}$ and $\bar L_{\rm older}$ be recent and preceding window means:
+Apex tracks the unweighted mean of positive last training losses for the preceding selected cohort. With window $`W=5`$, let $`\bar L_{\rm recent}`$ and $`\bar L_{\rm older}`$ be recent and preceding window means:
 
-$$
+```math
 \eta_t=\frac{\bar L_{\rm older}-\bar L_{\rm recent}}{\bar L_{\rm older}+10^{-12}},\qquad
-c_t=\frac{\operatorname{std}(L_{\rm recent})}{\bar L_{\rm recent}+10^{-12}}.
-$$
+c_t=\frac{\mathrm{std}(L_{\rm recent})}{\bar L_{\rm recent}+10^{-12}}.
+```
 
-The raw phase is critical when $\eta_t>0.05$ and $c_t>0.10$; otherwise transition when $\eta_t>0.01$; otherwise exploitation. Fewer than five observations retain the critical phase. Between five and nine observations, the older window is the first five observations and may overlap the recent window. Phase changes require the implemented minimum age of three selection calls and cannot jump directly between critical and exploitation.
+The raw phase is critical when $`\eta_t>0.05`$ and $`c_t>0.10`$; otherwise transition when $`\eta_t>0.01`$; otherwise exploitation. Fewer than five observations retain the critical phase. Between five and nine observations, the older window is the first five observations and may overlap the recent window. Phase changes require the implemented minimum age of three selection calls and cannot jump directly between critical and exploitation.
 
-| Phase | Utility/sampling weight $a$ | Diversity weight $b$ | Recency weight $c$ |
+| Phase | Utility/sampling weight $`a`$ | Diversity weight $`b`$ | Recency weight $`c`$ |
 |---|---:|---:|---:|
 | Critical | 0.20 | 0.60 | 0.20 |
 | Transition | 0.50 | 0.30 | 0.20 |
 | Exploitation | 0.70 | 0.15 | 0.15 |
 
-Label heterogeneity is estimated once from up to 200 deterministically spaced client pairs. For probability histograms $p_i,p_j$, using natural logarithms,
+Label heterogeneity is estimated once from up to 200 deterministically spaced client pairs. For probability histograms $`p_i,p_j`$, using natural logarithms,
 
-$$
-\operatorname{JSD}(p_i,p_j)=\tfrac12\operatorname{KL}(p_i\|M)+\tfrac12\operatorname{KL}(p_j\|M),
+```math
+\mathrm{JSD}(p_i,p_j)=\tfrac12\mathrm{KL}(p_i\|M)+\tfrac12\mathrm{KL}(p_j\|M),
 \qquad M=(p_i+p_j)/2,
-$$
+```
 
-$$
-H=\min\left(\frac{\operatorname{mean}_{(i,j)}\sqrt{\operatorname{JSD}(p_i,p_j)}}{0.6},1\right).
-$$
+```math
+H=\min\left(\frac{\mathrm{mean}_{(i,j)}\sqrt{\mathrm{JSD}(p_i,p_j)}}{0.6},1\right).
+```
 
-Missing usable histogram pairs give $H=0.5$. The effective weights are $b'=bH$, $a'=a+b-b'$, and $c'=c$. The cached estimate assumes static client label mixtures.
+Missing usable histogram pairs give $`H=0.5`$. The effective weights are $`b'=bH`$, $`a'=a+b-b'`$, and $`c'=c`$. The cached estimate assumes static client label mixtures.
 
 ### 4. Recency and greedy cohort construction
 
-Let $\Delta_i(t)$ be rounds since selection, or $t+1$ for an unseen client. The recency term and selection score are
+Let $`\Delta_i(t)`$ be rounds since selection, or $`t+1`$ for an unseen client. The recency term and selection score are
 
-$$
+```math
 R_i(t)=\frac{\Delta_i(t)}{\Delta_i(t)+\max(N/K,3)},\qquad
 Q_i(S)=a'z_i+b'd_i(S)+cR_i(t).
-$$
+```
 
-Starting with an empty cohort, repeatedly add the remaining client with the largest $Q_i(S)$ until $K$ clients are selected. The sampling draw is made once per candidate per round. If no client has a positive loss yet, sample clients without replacement using data-size weights. No hard time budget is enabled in the reproducible runner.
+Starting with an empty cohort, repeatedly add the remaining client with the largest $`Q_i(S)`$ until $`K`$ clients are selected. The sampling draw is made once per candidate per round. If no client has a positive loss yet, sample clients without replacement using data-size weights. No hard time budget is enabled in the reproducible runner.
 
-For proxy dimension $d=C+2$, the warm selection loop is $O(NK^2d+Nd)$ because distances to every selected proxy are recomputed for each remaining candidate at each greedy step. It retains $O(Nd+N+Kd)$ working state. Initial heterogeneity estimation can additionally scan $O(N^2)$ pair indices and evaluates at most 200 histogram distances. Training and evaluation costs are separate.
+For proxy dimension $`d=C+2`$, the warm selection loop is $`O(NK^2d+Nd)`$ because distances to every selected proxy are recomputed for each remaining candidate at each greedy step. It retains $`O(Nd+N+Kd)`$ working state. Initial heterogeneity estimation can additionally scan $`O(N^2)`$ pair indices and evaluates at most 200 histogram distances. Training and evaluation costs are separate.
 
 ## Reproduce the study settings
 
