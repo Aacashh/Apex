@@ -1,0 +1,45 @@
+protocol: apex_standalone_1
+name: apex-mnist
+methods:
+- apex
+cells:
+- id: D3
+  seeds:
+  - 42
+  config:
+    dataset: MNIST
+    model: CNN-MNIST
+    num_classes: 10
+    normalization: batchnorm
+    partition: dirichlet
+    alpha: 0.3
+    total_clients: 50
+    clients_per_round: 10
+    rounds: 100
+    split_seed: 260928
+    local_epochs: 1
+    batch_size: 128
+    lr: 0.01
+    momentum: 0.0
+    weight_decay: 0.0
+    precision: float32
+    optimizer: sgd
+    scheduler: constant
+    training_engine: reference
+    evaluation_batch_size: 512
+    parallel_clients: 0
+    num_workers: 0
+    smoke_test_mode: false
+    pretrained: false
+    dp_sigma: 0.0
+    dropout_probability: 0.0
+    time_budget: null
+    energy_budget: null
+    bytes_budget: null
+    reward: R0
+    local_probe: false
+    feedback_size: null
+    feature_shift: false
+    feedback_each_round: true
+    use_test_for_decisions: false
+    minimum_client_samples: 1

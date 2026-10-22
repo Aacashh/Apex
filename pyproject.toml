@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apex-federated-selection"
+version = "1.0.0"
+description = "Apex: adaptive phase-aware exploration for federated client selection"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name = "Aacashh"}]
+dependencies = ["torch==2.6.0", "torchvision==0.21.0", "numpy==2.2.6", "scipy==1.15.3", "PyYAML==6.0.2"]
+
+[project.scripts]
+apex = "apex.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["apex*"]

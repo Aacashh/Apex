@@ -1,0 +1,13 @@
+{
+  "selector_sha256": "92b20b8f59010eeb76cdbaecbb641c73397874ecc5556e801c37397fb93e7a2c",
+  "original_selector_sha256": "331d0148caff86870e92c855cef959a1e69c26eb3e6206e6286b158d2a95c27f",
+  "original_adapter_sha256": "ac6837ce0bfc6b277b3d34e5622abba090dedd8b64c182a2b4d257acc1e3c9c5",
+  "public_method": "Apex",
+  "changes": [
+    "Standalone package namespace",
+    "Apex-only selector and runner dispatch",
+    "Unit cosine proxy and neutral unobserved features enabled",
+    "Comments removed",
+    "Historical outputs retained separately without modification"
+  ]
+}

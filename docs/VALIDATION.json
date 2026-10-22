@@ -1,0 +1,128 @@
+{
+  "selector_cases": 180,
+  "selector_rounds": 5400,
+  "training_cases": [
+    {
+      "reward": "R0",
+      "local_probe": false,
+      "rounds": 8,
+      "selection_parity": true,
+      "model_hash_parity": true
+    },
+    {
+      "reward": "R0",
+      "local_probe": true,
+      "rounds": 8,
+      "selection_parity": true,
+      "model_hash_parity": true
+    },
+    {
+      "reward": "R1",
+      "local_probe": true,
+      "rounds": 8,
+      "selection_parity": true,
+      "model_hash_parity": true
+    },
+    {
+      "reward": "R2",
+      "local_probe": true,
+      "rounds": 8,
+      "selection_parity": true,
+      "model_hash_parity": true
+    },
+    {
+      "reward": "R3",
+      "local_probe": true,
+      "rounds": 8,
+      "selection_parity": true,
+      "model_hash_parity": true
+    }
+  ],
+  "comment_tokens": 0,
+  "environment": {
+    "python": "3.13.5",
+    "torch": "2.6.0+cu124",
+    "numpy": "2.1.3"
+  },
+  "status": "passed",
+  "gpu_campaign_rerun": false,
+  "historical_bitwise_reproduction_claim": false,
+  "dataset_forward_checks": [
+    {
+      "dataset": "CIFAR10",
+      "training_examples": 50000,
+      "test_examples": 10000,
+      "input_shape": [
+        3,
+        32,
+        32
+      ],
+      "output_shape": [
+        1,
+        10
+      ]
+    },
+    {
+      "dataset": "CIFAR100",
+      "training_examples": 50000,
+      "test_examples": 10000,
+      "input_shape": [
+        3,
+        32,
+        32
+      ],
+      "output_shape": [
+        1,
+        100
+      ]
+    },
+    {
+      "dataset": "Fashion-MNIST",
+      "training_examples": 60000,
+      "test_examples": 10000,
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "output_shape": [
+        1,
+        10
+      ]
+    },
+    {
+      "dataset": "MNIST",
+      "training_examples": 60000,
+      "test_examples": 10000,
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "output_shape": [
+        1,
+        10
+      ]
+    }
+  ],
+  "official_mnist_cli_smoke": {
+    "status": "completed",
+    "rounds": 2,
+    "source_locked": true,
+    "completion_verified": true,
+    "local_cpu": true
+  },
+  "standalone_unit_tests": {
+    "passed": 4,
+    "checkpoint_resume": true,
+    "audit_observer_parity": true,
+    "corruption_rejection": true
+  },
+  "comment_scan_files": 15,
+  "reviewer_archives": {
+    "count": 6,
+    "bytes": 401179897,
+    "run_records": 870,
+    "receipt_file_hashes_checked": 6557
+  }
+}

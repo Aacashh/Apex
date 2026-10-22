@@ -1,0 +1,96 @@
+[
+  {
+    "file": "Apex_A100_E1-E3_Primary_2026-10-18.zip",
+    "sha256": "ab24b4b5ae0737b1c16705e907098cbb1f53fdd5b1d1200b03665eb078ed2a94",
+    "bytes": 58195597,
+    "unique_runs": 75,
+    "analysis_rows": 75,
+    "rounds": 16000,
+    "methods": {
+      "Apex": 75
+    },
+    "receipt_file_hashes_checked": 1425,
+    "crc_verified": true,
+    "member_hashes_verified": 1506
+  },
+  {
+    "file": "Apex_A100_E4_Ablations_2026-10-18.zip",
+    "sha256": "91208c68d246e2f2fbf68d7e5ee49b98591425d03c8b50bf2ead6c8b886adc4d",
+    "bytes": 68993213,
+    "unique_runs": 105,
+    "analysis_rows": 110,
+    "rounds": 25500,
+    "methods": {
+      "Apex": 105
+    },
+    "receipt_file_hashes_checked": 1995,
+    "crc_verified": true,
+    "member_hashes_verified": 2106
+  },
+  {
+    "file": "Apex_A100_E5_Reward_2026-10-18.zip",
+    "sha256": "72ac745faa27639051c6c2f8adb6d23b33ac2c69402f1405852df6ec76ee305c",
+    "bytes": 28230144,
+    "unique_runs": 40,
+    "analysis_rows": 40,
+    "rounds": 10000,
+    "methods": {
+      "Apex": 40
+    },
+    "receipt_file_hashes_checked": 760,
+    "crc_verified": true,
+    "member_hashes_verified": 804
+  },
+  {
+    "file": "Apex_A100_E7_Feature-Shift_2026-10-18.zip",
+    "sha256": "26767908f84fe37dc00081439c7d82d7e5b59d293f1c8373abfc2f57e47a8b26",
+    "bytes": 5542147,
+    "unique_runs": 10,
+    "analysis_rows": 10,
+    "rounds": 2000,
+    "methods": {
+      "Apex": 10
+    },
+    "receipt_file_hashes_checked": 190,
+    "crc_verified": true,
+    "member_hashes_verified": 204
+  },
+  {
+    "file": "Apex_A100_Independent-Convergence_2026-10-20.zip",
+    "sha256": "670f1a2b854be177de8c96c95de9014b502e2137abec7d1fefe201eb28eb160f",
+    "bytes": 28087628,
+    "unique_runs": 40,
+    "analysis_rows": 40,
+    "rounds": 10000,
+    "methods": {
+      "FedCor": 10,
+      "Apex": 10,
+      "FedAvg": 10,
+      "MMR": 10
+    },
+    "receipt_file_hashes_checked": 762,
+    "crc_verified": true,
+    "member_hashes_verified": 813
+  },
+  {
+    "file": "Apex_A100_Primary-Comparators_2026-10-19.zip",
+    "sha256": "c1f3871f67c04d3d9100d75df9f2dae977a26fabc56dad014613adf6ea724532",
+    "bytes": 212131168,
+    "unique_runs": 600,
+    "analysis_rows": 600,
+    "rounds": 128000,
+    "methods": {
+      "FedAvg": 75,
+      "MMR": 75,
+      "PoC": 75,
+      "Oort": 75,
+      "FedCor": 75,
+      "FedCS": 75,
+      "TiFL": 75,
+      "FedAEB": 75
+    },
+    "receipt_file_hashes_checked": 1425,
+    "crc_verified": true,
+    "member_hashes_verified": 5240
+  }
+]

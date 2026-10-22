@@ -1,0 +1,97 @@
+protocol: apex_standalone_1
+name: apex-e7-feature-shift
+methods:
+- apex
+cells:
+- id: C3-gray-histogram
+  seeds:
+  - 42
+  - 123
+  - 456
+  - 789
+  - 1024
+  config:
+    dataset: CIFAR10
+    model: ResNet18
+    num_classes: 10
+    normalization: batchnorm
+    partition: iid
+    alpha: 0.3
+    total_clients: 50
+    clients_per_round: 10
+    rounds: 200
+    split_seed: 260928
+    local_epochs: 1
+    batch_size: 128
+    lr: 0.01
+    momentum: 0.0
+    weight_decay: 0.0
+    precision: float32
+    optimizer: sgd
+    scheduler: constant
+    training_engine: cuda_bf16
+    evaluation_batch_size: 512
+    parallel_clients: 0
+    num_workers: 0
+    smoke_test_mode: false
+    pretrained: false
+    dp_sigma: 0.0
+    dropout_probability: 0.0
+    time_budget: null
+    energy_budget: null
+    bytes_budget: null
+    reward: R0
+    local_probe: false
+    feedback_size: null
+    feature_shift: true
+    feedback_each_round: true
+    use_test_for_decisions: false
+    minimum_client_samples: 1
+    selector_params:
+      use_histogram: true
+- id: C3-gray-no-histogram
+  seeds:
+  - 42
+  - 123
+  - 456
+  - 789
+  - 1024
+  config:
+    dataset: CIFAR10
+    model: ResNet18
+    num_classes: 10
+    normalization: batchnorm
+    partition: iid
+    alpha: 0.3
+    total_clients: 50
+    clients_per_round: 10
+    rounds: 200
+    split_seed: 260928
+    local_epochs: 1
+    batch_size: 128
+    lr: 0.01
+    momentum: 0.0
+    weight_decay: 0.0
+    precision: float32
+    optimizer: sgd
+    scheduler: constant
+    training_engine: cuda_bf16
+    evaluation_batch_size: 512
+    parallel_clients: 0
+    num_workers: 0
+    smoke_test_mode: false
+    pretrained: false
+    dp_sigma: 0.0
+    dropout_probability: 0.0
+    time_budget: null
+    energy_budget: null
+    bytes_budget: null
+    reward: R0
+    local_probe: false
+    feedback_size: null
+    feature_shift: true
+    feedback_each_round: true
+    use_test_for_decisions: false
+    minimum_client_samples: 1
+    selector_params:
+      use_histogram: false
