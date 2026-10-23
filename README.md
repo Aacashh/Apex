@@ -226,5 +226,3 @@ Apex favors a trade-off among learning progress, diversity, and participation re
 | `apex/fast_training.py` | Explicit CIFAR BF16 GPU profile |
 | `apex/models.py`, `apex/datasets.py` | The two model families and four dataset loaders |
 | `apex/config.py`, `apex/__main__.py` | Validated configurations and CLI |
-
-The source contains no inline comments. Method explanations are maintained in this README and the supporting documentation. Dataset licenses remain with their owners; this repository does not add an open-source license grant.
