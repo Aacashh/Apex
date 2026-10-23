@@ -2,8 +2,6 @@
 
 **Adaptive Phase-aware EXploration for federated client selection.** Apex selects a cohort using learning feedback, diversity of client proxies, and time since participation. It trains no neural selection policy. This repository contains the selector, dataset preparation, local training, weighted model aggregation, checkpoint recovery, and reproducible experiment configurations.
 
-Author and maintainer: [Aacashh](https://github.com/Aacashh) (Aakash Sharma).
-
 ## Install
 
 Use Python 3.11. From this repository:
